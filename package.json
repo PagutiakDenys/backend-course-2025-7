@@ -1,18 +1,24 @@
 {
   "name": "backend-course-2025-6",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
+  "description": "Backend course project with Docker and PostgreSQL integration.",
+  "main": "main.js",
+"scripts": {
     "start": "node main.js",
-    "dev": "nodemon main.js",
+    "dev": "nodemon --exec 'node -r dotenv/config' main.js --host 0.0.0.0",
+    "debug": "node --inspect=0.0.0.0:9229 main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PagutiakDenys/backend-course-2025-6.git"
   },
-  "keywords": [],
+  "keywords": [
+    "node",
+    "express",
+    "docker",
+    "postgres"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
@@ -29,7 +35,8 @@
     "multer": "^2.0.2",
     "querystring": "^0.2.1",
     "superagent": "^10.2.3",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "pg": "^8.12.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"
