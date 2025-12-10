@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventory Registration</title>
+</head>
+<body>
+    <h1>Register New Inventory Item</h1>
+    <form action="/register" method="POST" enctype="multipart/form-data">
+        <label for="inventory_name">Inventory Name (Required):</label><br>
+        <input type="text" id="inventory_name" name="inventory_name" required><br><br>
+        
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description"></textarea><br><br>
+        
+        <label for="photo">Photo Image:</label><br>
+        <input type="file" id="photo" name="photo" accept="image/*"><br><br>
+        
+        <input type="submit" value="Register Item">
+    </form>
+</body>
+</html>

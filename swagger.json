@@ -1,0 +1,216 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Inventory Service API",
+    "version": "1.0.0",
+    "description": "API сервісу інвентаризації для управління пристроями та фото."
+  },
+  "host": "127.0.0.1:3000",
+  "basePath": "/",
+  "schemes": ["http"],
+  "consumes": [
+    "application/json",
+    "multipart/form-data",
+    "application/x-www-form-urlencoded"
+  ],
+  "produces": ["application/json"],
+  "tags": [
+    { "name": "Inventory", "description": "Управління інвентарними елементами" },
+    { "name": "Utilities", "description": "Допоміжні функції та форми" }
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": ["Inventory"],
+        "summary": "1. Реєстрація нового пристрою (з фото)",
+        "description": "Створює новий інвентарний елемент, підтримує завантаження файлу.",
+        "parameters": [
+          {
+            "name": "inventory_name",
+            "in": "formData",
+            "description": "Ім'я речі (ОБОВ'ЯЗКОВО).",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "formData",
+            "description": "Опис речі.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "photo",
+            "in": "formData",
+            "description": "Файл фото зображення (JPEG/PNG).",
+            "required": false,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Успішно створено",
+            "schema": { "$ref": "#/definitions/InventoryItem" }
+          },
+          "400": { "description": "Bad Request. Inventory Name is required" }
+        }
+      }
+    },
+    "/search": {
+      "post": {
+        "tags": ["Inventory"],
+        "summary": "2. Пошук пристрою за ID",
+        "description": "Шукає пристрій за ID. Використовує x-www-form-urlencoded.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "formData",
+            "description": "Унікальний ID інвентарної речі.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "has_photo",
+            "in": "formData",
+            "description": "Якщо 'on', додає посилання на фото до опису.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успішний пошук",
+            "schema": { "$ref": "#/definitions/InventoryItem" }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/inventory": {
+      "get": {
+        "tags": ["Inventory"],
+        "summary": "3. Отримати весь список інвентарю",
+        "description": "Повертає масив усіх інвентаризованих речей.",
+        "responses": {
+          "200": {
+            "description": "Успішно",
+            "schema": { "type": "array", "items": { "$ref": "#/definitions/InventoryItem" } }
+          }
+        }
+      }
+    },
+    "/inventory/{id}": {
+      "get": {
+        "tags": ["Inventory"],
+        "summary": "4. Отримати інформацію про річ за ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "Успішно", "schema": { "$ref": "#/definitions/InventoryItem" } },
+          "404": { "description": "Not Found" }
+        }
+      },
+      "put": {
+        "tags": ["Inventory"],
+        "summary": "5. Оновити ім'я або опис",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Нове ім'я або опис (JSON)",
+            "required": true,
+            "schema": {
+              "properties": {
+                "Inventory Name": { "type": "string" },
+                "Description": { "type": "string" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Успішно оновлено", "schema": { "$ref": "#/definitions/InventoryItem" } },
+          "404": { "description": "Not Found" }
+        }
+      },
+      "delete": {
+        "tags": ["Inventory"],
+        "summary": "6. Видалити річ",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": { "description": "Успішно видалено" },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/inventory/{id}/photo": {
+      "get": {
+        "tags": ["Inventory"],
+        "summary": "7. Отримати фото зображення",
+        "description": "Повертає бінарні дані зображення (image/jpeg).",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успішно, зображення",
+            "schema": { "type": "file" }
+          },
+          "404": { "description": "Not Found (річ або фото)" }
+        }
+      },
+      "put": {
+        "tags": ["Inventory"],
+        "summary": "8. Оновити фото зображення",
+        "description": "Замінює фотографію пристрою.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" },
+          {
+            "name": "photo",
+            "in": "formData",
+            "description": "Новий файл фотографії.",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Успішно оновлено" },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/RegisterForm.html": {
+      "get": {
+        "tags": ["Utilities"],
+        "summary": "9. Отримати форму реєстрації",
+        "responses": {
+          "200": { "description": "Успішно (HTML)" }
+        }
+      }
+    },
+    "/SearchForm.html": {
+      "get": {
+        "tags": ["Utilities"],
+        "summary": "10. Отримати форму пошуку",
+        "responses": {
+          "200": { "description": "Успішно (HTML)" }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "InventoryItem": {
+      "type": "object",
+      "properties": {
+        "ID": { "type": "string", "description": "Унікальний ідентифікатор" },
+        "Inventory Name": { "type": "string", "description": "Назва пристрою" },
+        "Description": { "type": "string", "description": "Опис пристрою" },
+        "Photo_URL": { "type": "string", "format": "url", "description": "Посилання на фотографію пристрою" }
+      },
+      "required": ["ID", "Inventory Name"]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Inventory</title>
+</head>
+<body>
+    <h1>Search Inventory Item by ID</h1>
+    <form action="/search" method="POST">
+        <label for="id">Inventory ID (Serial Number):</label><br>
+        <input type="text" id="id" name="id" required><br><br>
+        
+        <input type="checkbox" id="has_photo" name="has_photo" value="on">
+        <label for="has_photo">Add photo URL to description</label><br><br>
+        
+        <input type="submit" value="Search">
+    </form>
+</body>
+</html>
